@@ -11,7 +11,15 @@ const conversationChanged = `
 const conversationMessageInserted = `
   subscription conversationMessageInserted($_id: String!) {
     conversationMessageInserted(_id: $_id) {
-      ${messageFields}
+      _id
+      content
+      attachments
+      conversationId
+      internal
+      customerId
+      userId
+      createdAt
+      customer
     }
   }
 `;

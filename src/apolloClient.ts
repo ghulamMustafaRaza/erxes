@@ -13,9 +13,17 @@ export const getEnv = () => {
 
   const getItem = name => process.env[name] || wenv[name];
 
+  const host = window.location.host;
+
   return {
-    REACT_APP_API_URL: getItem('REACT_APP_API_URL'),
-    REACT_APP_API_SUBSCRIPTION_URL: getItem('REACT_APP_API_SUBSCRIPTION_URL'),
+    REACT_APP_API_URL: `http://${host.replace(
+      'erxes.local:3000',
+      'erxes-api.local:3300'
+    )}`,
+    REACT_APP_API_SUBSCRIPTION_URL: `ws://${host.replace(
+      'erxes.local:3000',
+      'erxes-api.local:3300'
+    )}/subscriptions`,
     REACT_APP_CDN_HOST: getItem('REACT_APP_CDN_HOST')
   };
 };

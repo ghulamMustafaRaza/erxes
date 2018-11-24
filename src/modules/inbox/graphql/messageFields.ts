@@ -59,26 +59,5 @@ export default `
     avatar
     firstName
     lastName
-    primaryEmail
-    primaryPhone
-    isUser
-    companies {
-      _id
-      primaryName
-      website
-    }
-
-    getMessengerCustomData
-    customFieldsData
-    messengerData
-    twitterData
-    facebookData
-
-    tagIds
-    getTags {
-      _id
-      name
-      colorCode
-    }
   }
 `;

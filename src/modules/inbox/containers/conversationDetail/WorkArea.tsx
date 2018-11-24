@@ -93,6 +93,14 @@ class WorkArea extends React.Component<FinalProps, State> {
             return;
           }
 
+          message.mentionedUserIds = [];
+          message.isCustomerRead = false;
+          message.formWidgetData = null;
+          message.messengerAppData = null;
+          message.twitterData = null;
+          message.facebookData = null;
+          message.user = null;
+
           // add new message to messages list
           const next = {
             ...prev,
