@@ -119,12 +119,12 @@ class CustomerListContainer extends React.Component<FinalProps, State> {
     const handleXlsUpload = e => {
       const xlsFile = e.target.files;
 
-      const { REACT_APP_API_URL } = getEnv();
+      const { API_URL } = getEnv();
 
       uploadHandler({
         files: xlsFile,
         extraFormData: [{ key: 'type', value: 'customers' }],
-        url: `${REACT_APP_API_URL}/import-file`,
+        url: `${API_URL}/import-file`,
         responseType: 'json',
         beforeUpload: () => {
           this.setState({ loading: true });

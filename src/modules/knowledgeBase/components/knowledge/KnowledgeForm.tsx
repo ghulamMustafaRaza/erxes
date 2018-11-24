@@ -53,12 +53,12 @@ type State = {
 
 class KnowledgeForm extends React.Component<Props, State> {
   static installCodeIncludeScript() {
-    const { REACT_APP_CDN_HOST } = getEnv();
+    const { CDN_HOST } = getEnv();
 
     return `
       (function() {
         var script = document.createElement('script');
-        script.src = "${REACT_APP_CDN_HOST}/knowledgeBaseWidget.bundle.js";
+        script.src = "${CDN_HOST}/knowledgeBaseWidget.bundle.js";
         script.async = true;
         var entry = document.getElementsByTagName('script')[0];
         entry.parentNode.insertBefore(script, entry);

@@ -7,32 +7,57 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 import { Alert } from 'modules/common/utils';
 
+const splitHostname = (): {
+  domain: string;
+  type: string;
+  subdomain: string;
+} => {
+  const result = {
+    domain: '',
+    type: '',
+    subdomain: ''
+  };
+
+  const regexParse = new RegExp('([a-z-0-9]{2,63}).([a-z.]{2,5})$');
+  const urlParts = regexParse.exec(window.location.hostname);
+
+  if (!urlParts || urlParts.length < 2) {
+    return result;
+  }
+
+  result.domain = urlParts[1];
+  result.type = urlParts[2];
+  result.subdomain = window.location.hostname
+    .replace(result.domain + '.' + result.type, '')
+    .slice(0, -1);
+
+  return result;
+};
+
 // get env config from process.env or window.env
 export const getEnv = () => {
-  const wenv = (window as any).env || {};
-
-  const getItem = name => process.env[name] || wenv[name];
-
-  const host = window.location.host;
+  const {
+    REACT_APP_CDN_HOST = '',
+    REACT_APP_API_URL = '',
+    REACT_APP_API_SUBSCRIPTION_URL = ''
+  } = process.env;
+  const { subdomain } = splitHostname();
 
   return {
-    REACT_APP_API_URL: `http://${host.replace(
-      'erxes.local:3000',
-      'erxes-api.local:3300'
-    )}`,
-    REACT_APP_API_SUBSCRIPTION_URL: `ws://${host.replace(
-      'erxes.local:3000',
-      'erxes-api.local:3300'
-    )}/subscriptions`,
-    REACT_APP_CDN_HOST: getItem('REACT_APP_CDN_HOST')
+    CDN_HOST: REACT_APP_CDN_HOST.replace('<subdomain>', subdomain),
+    API_URL: REACT_APP_API_URL.replace('<subdomain>', subdomain),
+    API_SUBSCRIPTION_URL: REACT_APP_API_SUBSCRIPTION_URL.replace(
+      '<subdomain>',
+      subdomain
+    )
   };
 };
 
-const { REACT_APP_API_URL, REACT_APP_API_SUBSCRIPTION_URL } = getEnv();
+const { API_URL, API_SUBSCRIPTION_URL } = getEnv();
 
 // Create an http link:
 const httpLink = createHttpLink({
-  uri: `${REACT_APP_API_URL}/graphql`,
+  uri: `${API_URL}/graphql`,
   credentials: 'include'
 });
 
@@ -48,7 +73,7 @@ const httpLinkWithMiddleware = errorLink.concat(httpLink);
 
 // Subscription config
 export const wsLink = new WebSocketLink({
-  uri: REACT_APP_API_SUBSCRIPTION_URL || '',
+  uri: API_SUBSCRIPTION_URL || '',
   options: {
     reconnect: true,
     timeout: 30000

@@ -28,14 +28,14 @@ type Params = {
 };
 
 const uploadHandler = (params: Params) => {
-  const { REACT_APP_API_URL } = getEnv();
+  const { API_URL } = getEnv();
 
   const {
     files,
     beforeUpload,
     afterUpload,
     afterRead,
-    url = `${REACT_APP_API_URL}/upload-file`,
+    url = `${API_URL}/upload-file`,
     responseType = 'text',
     extraFormData = []
   } = params;
