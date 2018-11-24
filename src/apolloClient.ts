@@ -7,7 +7,7 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 import { Alert } from 'modules/common/utils';
 
-const splitHostname = (): {
+export const splitHostname = (): {
   domain: string;
   type: string;
   subdomain: string;

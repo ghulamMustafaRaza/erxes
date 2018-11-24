@@ -1,3 +1,4 @@
+import { splitHostname } from 'apolloClient';
 import gql from 'graphql-tag';
 import { queries, subscriptions } from 'modules/inbox/graphql';
 import { UnreadConversationsTotalCountQueryResponse } from 'modules/inbox/types';
@@ -10,9 +11,12 @@ class NavigationContainer extends React.Component<{
   unreadConversationsCountQuery: UnreadConversationsTotalCountQueryResponse;
 }> {
   componentWillMount() {
+    const { subdomain } = splitHostname();
+
     this.props.unreadConversationsCountQuery.subscribeToMore({
       // listen for all conversation changes
       document: gql(subscriptions.conversationClientMessageInserted),
+      variables: { subdomain },
 
       updateQuery: () => {
         this.props.unreadConversationsCountQuery.refetch();

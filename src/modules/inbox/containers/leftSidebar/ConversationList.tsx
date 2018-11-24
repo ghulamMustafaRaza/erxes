@@ -1,3 +1,4 @@
+import { splitHostname } from 'apolloClient';
 import gql from 'graphql-tag';
 import { router as routerUtils, withProps } from 'modules/common/utils';
 import { ConversationList } from 'modules/inbox/components/leftSidebar';
@@ -27,9 +28,11 @@ type FinalProps = {
 class ConversationListContainer extends React.Component<FinalProps> {
   componentWillMount() {
     const { conversationsQuery } = this.props;
+    const { subdomain } = splitHostname();
 
     conversationsQuery.subscribeToMore({
       document: gql(subscriptions.conversationClientMessageInserted),
+      variables: { subdomain },
       updateQuery: () => {
         conversationsQuery.refetch();
       }
